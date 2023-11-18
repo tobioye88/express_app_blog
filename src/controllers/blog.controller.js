@@ -1,18 +1,17 @@
 const { Blog } = require("../database/models/blog.model");
-const NodeCache = require("node-cache");
-
-const Cache = new NodeCache();
+const Cache = require("../helpers/cache.helper.js");
 
 const getBlog = async (req, res) => {
   const { id } = req.params;
   // add node cache here
   const cacheKey = `blog-${id}`;
-  const cachedBlog = Cache.get(cacheKey);
-  if (cachedBlog) {
-    console.log("cache hit");
-    res.json({ success: true, message: "success", data: cachedBlog });
-    return;
-  }
+  // const cachedBlog = Cache.get(cacheKey);
+  // if (cachedBlog) {
+  //   console.log("cache hit");
+  //   // Cache.ttl(cacheKey, 60 * 60 * 24)
+  //   res.json({ success: true, message: "success", data: cachedBlog });
+  //   return;
+  // }
   const post = await Blog.findOne({ where: { id } });
   if (!post) {
     res.status(404).json({
